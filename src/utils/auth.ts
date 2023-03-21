@@ -2,6 +2,7 @@ import jwt, { Secret } from "jsonwebtoken";
 import dotenv from "dotenv";
 import { UserInterface } from "../db/models/user";
 import { User } from "../db/models";
+import { AppError } from "./error";
 
 const user = new User();
 dotenv.config();
@@ -66,7 +67,10 @@ export class Auth {
     if (authHeader && authHeader.startsWith("Bearer")) {
       token = authHeader.split(" ")[1];
     }
-    if (!token) throw new Error("You have no token, please login!");
+
+    if (!token) {
+      new AppError("You have no token, please login!", 402).unAuthenticated();
+    }
 
     const decoded: any = jwt.verify(token, this.jwtSecret);
     const expiresIn: number = (decoded.exp - decoded.iat) * 1000;
@@ -76,11 +80,14 @@ export class Auth {
     const isExpired: boolean = expiryTime < currentTime;
 
     if (isExpired) {
-      throw new Error("Token expired, please login!");
+      new AppError("Token expired, please login!", 402).unAuthenticated();
     }
     const savedUser = await user.findById(decoded.id);
     if (!savedUser) {
-      throw new Error("The user belonging to this token no longer exists!");
+      new AppError(
+        "The user belonging to this token no longer exists!",
+        403
+      ).forbidden();
     }
   }
 }

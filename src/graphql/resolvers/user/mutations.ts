@@ -1,6 +1,7 @@
 import { User } from "../../../db/models";
 import { UserInterface } from "../../../db/models/user";
 import { Auth } from "../../../utils/auth";
+import { AppError } from "../../../utils/error";
 
 const user = new User();
 
@@ -9,7 +10,7 @@ const userMutations = {
     console.log(args);
 
     if (await user.findByEmail(args.email)) {
-      throw new Error("Supplied email is already registered!");
+      new AppError("Supplied email is already registered!", 400).badUserInput();
     }
     const newUser = await user.create(args);
 
@@ -21,12 +22,12 @@ const userMutations = {
 
     const savedUser = await user.findByEmail(args.email);
 
-    const isCorrectPassword = await user.comparePasswords(
+    const correctPassword = await user.comparePasswords(
       args.password,
       savedUser.password
     );
-    if (!savedUser || !isCorrectPassword) {
-      throw new Error("Supplied invalid email or password");
+    if (!savedUser || !correctPassword) {
+      new AppError("Supplied invalid email or password", 400).badUserInput();
     }
     return new Auth().authenticate(savedUser);
   },

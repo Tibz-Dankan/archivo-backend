@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getStorage, ref } from "firebase/storage";
 import { deleteObject, uploadString, getDownloadURL } from "firebase/storage";
 import dotenv from "dotenv";
+import { AppError } from "./error";
 
 dotenv.config();
 
@@ -41,7 +42,9 @@ export class Upload {
 
   private path(filePath: string) {
     const isProduction: boolean = process.env.NODE_ENV === "production";
-    if (!filePath) throw new Error("Please provide file directory");
+    if (!filePath) {
+      new AppError("Sorry something went wrong on our end!", 500).serverError();
+    }
     if (isProduction) return `prod/${filePath}`;
     if (!isProduction) return `dev/${filePath}`;
   }
@@ -58,6 +61,7 @@ export class Upload {
       return this.upload;
     } catch (err) {
       console.log("err", err);
+      new AppError("Sorry, error occurred while uploading!", 500).serverError();
     }
   }
 
@@ -79,6 +83,7 @@ export class Upload {
       return this.upload;
     } catch (err) {
       console.log("err", err);
+      new AppError("Sorry, error occurred while uploading!", 500).serverError();
     }
   }
 
@@ -88,6 +93,7 @@ export class Upload {
       await deleteObject(reference);
     } catch (err) {
       console.log("err", err);
+      new AppError("Sorry, error occurred while deleting!", 500).serverError();
     }
   }
 }
