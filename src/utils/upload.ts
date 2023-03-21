@@ -5,11 +5,16 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export class Upload {
-  firebaseStorage: any;
-  fileDir: string;
+interface UploadInterface {
+  url: string;
+}
 
-  constructor(fileDirectory: string) {
+export class Upload {
+  private firebaseStorage: any;
+  private filePath: string;
+  upload: UploadInterface;
+
+  constructor(filePath: string) {
     const firebaseConfig = {
       apiKey: process.env.API_KEY!,
       authDomain: process.env.AUTH_DOMAIN!,
@@ -21,39 +26,57 @@ export class Upload {
     };
     const firebaseApp = initializeApp(firebaseConfig);
     this.firebaseStorage = getStorage(firebaseApp);
-    this.fileDir = fileDirectory;
+    this.filePath = filePath;
+    this.upload = { url: "" };
   }
 
-  filePath(fileDir: string) {
+  private async streamToBase64(stream: any) {
+    const chunks = [];
+
+    for await (const chunk of stream) {
+      chunks.push(Buffer.from(chunk));
+    }
+    return Buffer.concat(chunks).toString("base64");
+  }
+
+  private path(filePath: string) {
     const isProduction: boolean = process.env.NODE_ENV === "production";
-    if (!fileDir) throw new Error("Please provide file directory");
-    if (isProduction) return `prod/${fileDir}`;
-    if (!isProduction) return `dev/${fileDir}`;
+    if (!filePath) throw new Error("Please provide file directory");
+    if (isProduction) return `prod/${filePath}`;
+    if (!isProduction) return `dev/${filePath}`;
   }
 
-  async add(fileBase64: string) {
+  async add(stream: any) {
     try {
-      const reference = ref(this.firebaseStorage, this.filePath(this.fileDir));
+      const reference = ref(this.firebaseStorage, this.path(this.filePath));
+
+      const fileBase64 = await this.streamToBase64(stream);
+
       await uploadString(reference, fileBase64, "base64");
-      const URL: string = await getDownloadURL(reference);
-      return URL;
+      this.upload.url = await getDownloadURL(reference);
+
+      return this.upload;
     } catch (err) {
       console.log("err", err);
     }
   }
 
-  async update(fileBase64: string, savedFileDir: string) {
+  async update(stream: any, savedFilePath: string) {
     try {
-      let reference = ref(this.firebaseStorage, this.filePath(this.fileDir));
+      let reference = ref(this.firebaseStorage, this.path(this.filePath));
+      const fileBase64 = await this.streamToBase64(stream);
+
       await uploadString(reference, fileBase64, "base64");
       const URL: string = await getDownloadURL(reference);
 
       // delete the saved file
-      reference = ref(this.firebaseStorage, this.filePath(savedFileDir));
+      reference = ref(this.firebaseStorage, this.path(savedFilePath));
       if (URL) {
         await deleteObject(reference);
       }
-      return URL;
+      this.upload.url = URL;
+
+      return this.upload;
     } catch (err) {
       console.log("err", err);
     }
@@ -61,23 +84,10 @@ export class Upload {
 
   async delete() {
     try {
-      const reference = ref(this.firebaseStorage, this.filePath(this.fileDir));
+      const reference = ref(this.firebaseStorage, this.path(this.filePath));
       await deleteObject(reference);
     } catch (err) {
       console.log("err", err);
     }
   }
 }
-
-
-
-// //upload blob or file directly from javascript File
-// import { getStorage, ref, uploadBytes } from "firebase/storage";
-
-// const storage = getStorage();
-// const storageRef = ref(storage, 'some-child');
-
-// // 'file' comes from the Blob or File API
-// uploadBytes(storageRef, file).then((snapshot) => {
-//   console.log('Uploaded a blob or file!');
-// });

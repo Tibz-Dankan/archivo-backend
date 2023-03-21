@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { UserInterface } from "../db/models/user";
 import { User } from "../db/models";
 
-const auth = new User();
+const user = new User();
 dotenv.config();
 
 // interface AuthInterface extends UserInterface {
@@ -78,7 +78,7 @@ export class Auth {
     if (isExpired) {
       throw new Error("Token expired, please login!");
     }
-    const savedUser = await auth.findById(decoded.id);
+    const savedUser = await user.findById(decoded.id);
     if (!savedUser) {
       throw new Error("The user belonging to this token no longer exists!");
     }

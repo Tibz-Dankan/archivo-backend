@@ -1,21 +1,27 @@
 import { finished } from "stream/promises";
-import fs from "fs";
-// import * as fs from "fs";
+import { Upload } from "../../../utils/upload";
 
 const fileMutations = {
-  // singleUpload: async (_: any, { file }) => {
-  singleUpload: async (_: any, file: any, context: any) => {
+  singleUpload: async (_: any, uploadObj: any, context: any) => {
     console.log("context");
     console.log(context);
 
-    console.log("file");
-    console.log(file);
+    const file = uploadObj.file;
+
     const { createReadStream, filename, mimetype, encoding } = await file;
 
     const stream = createReadStream();
-    const out = fs.createWriteStream("local-file-output.txt");
-    stream.pipe(out);
-    await finished(out);
+    const filePath = `files/${Date.now()}-${filename}`;
+
+    const upload = await new Upload(filePath).add(stream);
+
+    console.log("upload");
+    console.log(upload);
+
+    console.log("url");
+    console.log(upload?.url);
+
+    await finished(stream);
 
     return { filename, mimetype, encoding };
   },
