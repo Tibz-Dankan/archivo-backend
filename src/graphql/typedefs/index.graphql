@@ -31,4 +31,8 @@ type Mutation {
   singleUpload(file: Upload!): File!
   # createFile(file: FileCreateInput!): File!
   # updateFile(id: ID!, file: FileUpdateInput!): File!
+
+  # Folders
+  createFolder(name: String!, ownerId: String!): Folder!
+  deleteFolder(id: ID!): Folder!
 }

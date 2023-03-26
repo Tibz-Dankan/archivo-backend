@@ -13,11 +13,13 @@ import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
 
 import { userQueries, userMutations } from "./user";
 import { fileQueries, fileMutations } from "./file";
+import { folderQueries, folderMutations } from "./folder";
 
 const resolvers = {
   Query: {
     ...userQueries,
     ...fileQueries,
+    ...folderQueries,
   },
 
   Upload: GraphQLUpload,
@@ -25,6 +27,7 @@ const resolvers = {
   Mutation: {
     ...userMutations,
     ...fileMutations,
+    ...folderMutations,
   },
 };
 

@@ -13,7 +13,7 @@ export default class Folder {
 
   constructor() {
     this.prisma = new PrismaClient();
-    this.folder = this.prisma.file;
+    this.folder = this.prisma.folder;
   }
 
   async create(folder: FolderInterface) {
@@ -22,6 +22,8 @@ export default class Folder {
       select: {
         id: true,
         name: true,
+        ownerId: true,
+        parentId: true,
       },
     });
   }
@@ -30,7 +32,7 @@ export default class Folder {
     return await this.folder.findMany({});
   }
 
-  async findById(id: number) {
+  async findById(id: string) {
     return await this.folder.findFirst({
       where: {
         id: { equals: id },
@@ -50,6 +52,14 @@ export default class Folder {
     return await this.folder.findFirst({
       where: {
         folderId: { equals: folderId },
+      },
+    });
+  }
+
+  async delete(id: string) {
+    return this.folder.delete({
+      where: {
+        id: { equals: id },
       },
     });
   }

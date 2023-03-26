@@ -1,0 +1,9 @@
+# type Folder implements Response {
+type Folder {
+  id: ID!
+  name: String!
+  createdAt: String # UTC string date
+  updatedAt: String # UTC string date
+  ownerId: String!
+  parentId: String
+}
