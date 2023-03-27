@@ -9,54 +9,65 @@ datasource db {
 }
 
 model User {
-  id                   String    @id @default(uuid())
-  name                 String    @db.VarChar(255)
-  email                String    @unique
-  password             String    @db.VarChar(255)
-  imageUrl             String?   @db.VarChar(255)
-  imageName            String?   @db.VarChar(255)
-  createdAt            DateTime  @default(now())
-  updateAt             DateTime? @updatedAt
+  id                   String      @id @unique @default(uuid())
+  name                 String      @db.VarChar(255)
+  email                String      @unique
+  password             String      @db.VarChar(255)
+  imageUrl             String?     @db.VarChar(255)
+  imageName            String?     @db.VarChar(255)
+  createdAt            DateTime    @default(now())
+  updateAt             DateTime?   @updatedAt
   passwordResetToken   String?
   passwordResetExpires DateTime?
   file                 File[]
-  folder               Folder[]
+  folder               Folder[]    @relation("folderOwner")
+  subFolder            SubFolder[] @relation("subFolderOwner")
 }
 
 model File {
-  id         String   @id @unique @default(uuid())
-  name       String   @db.VarChar(255)
-  systemName String   @db.VarChar(255)
-  url        String   @db.VarChar(255)
-  path       String   @db.VarChar(255)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  owner      User     @relation(fields: [ownerId], references: [id])
-  ownerId    String
-  folder     Folder   @relation("FolderFile", fields: [folderId], references: [id])
-  folderId   String
+  id          String     @id @unique @default(uuid())
+  name        String     @db.VarChar(255)
+  systemName  String     @db.VarChar(255)
+  url         String     @db.VarChar(255)
+  path        String     @db.VarChar(255)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  owner       User       @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  folder      Folder?    @relation("folderFile", fields: [folderId], references: [id])
+  folderId    String?
+  subFolder   SubFolder? @relation("subFolderFile", fields: [subFolderId], references: [id])
+  subFolderId String?
 
   @@index([ownerId], name: "fileOwnerId")
   @@index([folderId], name: "fileFolderId")
+  @@index([subFolderId], name: "fileSubFolderId")
 }
 
 model Folder {
-  id        String        @id @unique @default(uuid())
-  name      String        @db.VarChar(255)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  owner     User          @relation(fields: [ownerId], references: [id])
+  id        String   @id @unique @default(uuid())
+  name      String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  owner     User     @relation("folderOwner", fields: [ownerId], references: [id])
   ownerId   String
-  parent    ParentFolder? @relation(fields: [parentId], references: [id])
-  parentId  String?       @unique
-  files     File[]        @relation("FolderFile")
+  files     File[]   @relation("folderFile")
 
   @@index([ownerId], name: "folderOwnerId")
 }
 
-model ParentFolder {
-  id       String  @id @default(uuid())
-  childFolder Folder?
+model SubFolder {
+  id                String   @id @unique @default(uuid())
+  name              String   @db.VarChar(255)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  owner             User     @relation("subFolderOwner", fields: [ownerId], references: [id])
+  ownerId           String
+  subFolderParentId String
+  files             File[]   @relation("subFolderFile")
+
+  @@index([ownerId], name: "subFolderOwnerId")
+  @@index([subFolderParentId], name: "subFolderParentId")
 }
 
 // IMPORTANT COMMNANDS 
