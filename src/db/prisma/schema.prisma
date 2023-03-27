@@ -12,6 +12,7 @@ model User {
   id                   String      @id @unique @default(uuid())
   name                 String      @db.VarChar(255)
   email                String      @unique
+  role                 Role        @default(user)
   password             String      @db.VarChar(255)
   imageUrl             String?     @db.VarChar(255)
   imageName            String?     @db.VarChar(255)
@@ -22,6 +23,11 @@ model User {
   file                 File[]
   folder               Folder[]    @relation("folderOwner")
   subFolder            SubFolder[] @relation("subFolderOwner")
+}
+
+enum Role {
+  user
+  admin
 }
 
 model File {
