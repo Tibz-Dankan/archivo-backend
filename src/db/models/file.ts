@@ -1,13 +1,14 @@
 import { PrismaClient } from "@prisma/client";
 
 export interface FileInterface {
-  id: string;
+  id?: string;
   name: string;
   systemName: string;
-  url: string;
+  url: string | undefined;
   path: string;
   ownerId: string;
-  folderId: string;
+  folderId?: string;
+  subFolderId?: string;
 }
 
 export default class File {
@@ -25,17 +26,16 @@ export default class File {
       select: {
         id: true,
         name: true,
+        systemName: true,
         path: true,
         url: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
 
-  async findMany() {
-    return await this.file.findMany({});
-  }
-
-  async findById(id: number) {
+  async findById(id: string) {
     return await this.file.findFirst({
       where: {
         id: { equals: id },
@@ -44,7 +44,7 @@ export default class File {
   }
 
   async findByOwnerId(ownerId: string) {
-    return await this.file.findFirst({
+    return await this.file.findMany({
       where: {
         ownerId: { equals: ownerId },
       },
@@ -52,14 +52,28 @@ export default class File {
   }
 
   async findByFolderId(folderId: string) {
-    return await this.file.findFirst({
+    return await this.file.findMany({
       where: {
         folderId: { equals: folderId },
       },
     });
   }
 
-  async update(id: number, name: string, systemName: String, url: string) {
+  async findBySubFolderId(SubFolderId: string) {
+    return await this.file.findMany({
+      where: {
+        subFolderId: { equals: SubFolderId },
+      },
+    });
+  }
+
+  async update(
+    id: string,
+    name: string,
+    systemName: String,
+    url: string,
+    path: string
+  ) {
     return await this.file.update({
       where: {
         id: { equals: id },
@@ -68,12 +82,16 @@ export default class File {
         name: name,
         url: url,
         systemName: systemName,
+        path: path,
       },
       select: {
         id: true,
         name: true,
+        systemName: true,
         path: true,
         url: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
