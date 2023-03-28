@@ -1,0 +1,8 @@
+type SubFolder {
+  id: ID!
+  name: String!
+  createdAt: String # UTC string date
+  updatedAt: String # UTC string date
+  ownerId: String!
+  subFolderParentId: String!
+}

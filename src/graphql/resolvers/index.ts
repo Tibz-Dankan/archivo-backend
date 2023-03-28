@@ -1,25 +1,16 @@
-// // Graphql upload
-// declare module "graphql-upload" {
-//   export function processRequest<T>(
-//     request: any,
-//     response: any,
-//     options?: any
-//   ): Promise<T>;
-// }
-
 import GraphQLUpload from "graphql-upload/GraphQLUpload.mjs";
-// import { GraphQLUpload } from "graphql-upload/GraphQLUpload";
-// import Upload from "graphql-upload/Upload";
 
 import { userQueries, userMutations } from "./user";
 import { fileQueries, fileMutations } from "./file";
 import { folderQueries, folderMutations } from "./folder";
+import { subFolderQueries, subFolderMutations } from "./subfolder";
 
 const resolvers = {
   Query: {
     ...userQueries,
     ...fileQueries,
     ...folderQueries,
+    ...subFolderQueries,
   },
 
   Upload: GraphQLUpload,
@@ -28,6 +19,7 @@ const resolvers = {
     ...userMutations,
     ...fileMutations,
     ...folderMutations,
+    ...subFolderMutations,
   },
 };
 

@@ -11,18 +11,12 @@ type Query {
   # Folder
   findFolderById(id: ID!): Folder!
   findFolderByOwnerId(id: ID!): [Folder]!
+
+  # SubFolder
+  findSubFolderById(id: ID!): SubFolder!
+  findSubFolderByOwnerId(id: ID!): [SubFolder]!
+  findSubFolderByParentId(id: ID!): [SubFolder]!
 }
-
-# type Mutation {
-#   # Users
-#   createUser(user: UserCreateInput!): User!
-#   updateUser(id: ID!, user: UserUpdateInput!): User!
-#   updatePassword(id: ID!, user: UpdatePasswordInput!): User!
-
-#   # Files
-#   createFile(file: FileCreateInput!): File!
-#   updateFile(id: ID!, file: FileUpdateInput!): File!
-# }
 
 type Mutation {
   # Users
@@ -39,4 +33,12 @@ type Mutation {
   # Folders
   createFolder(name: String!, ownerId: String!): Folder!
   deleteFolder(id: ID!): Folder!
+
+  # SubFolders
+  createSubFolder(
+    name: String!
+    ownerId: String!
+    parentId: String!
+  ): SubFolder!
+  deleteSubFolder(id: ID!): SubFolder!
 }
