@@ -4,7 +4,6 @@ export interface FolderInterface {
   id: string;
   name: string;
   ownerId: string;
-  parentId: string;
 }
 
 export default class Folder {
@@ -23,7 +22,6 @@ export default class Folder {
         id: true,
         name: true,
         ownerId: true,
-        parentId: true,
       },
     });
   }
@@ -41,17 +39,9 @@ export default class Folder {
   }
 
   async findByOwnerId(ownerId: string) {
-    return await this.folder.findFirst({
+    return await this.folder.findMany({
       where: {
         ownerId: { equals: ownerId },
-      },
-    });
-  }
-
-  async findByFolderId(folderId: string) {
-    return await this.folder.findFirst({
-      where: {
-        folderId: { equals: folderId },
       },
     });
   }

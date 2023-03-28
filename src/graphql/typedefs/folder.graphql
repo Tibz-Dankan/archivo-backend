@@ -5,5 +5,4 @@ type Folder {
   createdAt: String # UTC string date
   updatedAt: String # UTC string date
   ownerId: String!
-  parentId: String
 }

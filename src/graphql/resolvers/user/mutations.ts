@@ -24,7 +24,7 @@ const userMutations = {
 
     const correctPassword = await user.comparePasswords(
       args.password,
-      savedUser.password
+      savedUser?.password
     );
     if (!savedUser || !correctPassword) {
       new AppError("Supplied invalid email or password", 400).badUserInput();

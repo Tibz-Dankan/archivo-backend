@@ -5,9 +5,6 @@ const folder = new Folder();
 
 const folderMutations = {
   createFolder: async (_: any, args: any) => {
-    console.log("args");
-    console.log(args);
-
     const name = args.name;
     const ownerId = args.ownerId;
 
@@ -20,8 +17,6 @@ const folderMutations = {
   },
 
   deleteFolder: async (_: any, args: any) => {
-    console.log("args");
-    console.log(args);
     const id: string = args.id;
     if (!id) {
       new AppError("Please provide folder id!", 400).badUserInput();

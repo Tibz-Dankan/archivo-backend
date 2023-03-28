@@ -7,6 +7,10 @@ type Query {
   # File
   findFiles: [File]!
   findFilesById(id: ID!): File
+
+  # Folder
+  findFolderById(id: ID!): Folder!
+  findFolderByOwnerId(id: ID!): [Folder]!
 }
 
 # type Mutation {
