@@ -22,6 +22,8 @@ export default class Folder {
         id: true,
         name: true,
         ownerId: true,
+        createdAt: true,
+        updatedAt: true,
       },
     });
   }
