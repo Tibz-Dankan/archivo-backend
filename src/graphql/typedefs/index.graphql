@@ -7,6 +7,8 @@ type Query {
   # File
   findFiles: [File]!
   findFilesById(id: ID!): File
+  findFileByFolderId(id: ID!): [File]!
+  findFileBySubFolderId(id: ID!): [File]!
 
   # Folder
   findFolderById(id: ID!): Folder!
