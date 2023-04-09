@@ -8,6 +8,7 @@ scalar Upload
 
 type File {
   id: ID
+  ownerId: String
   name: String!
   url: String
   systemName: String!
