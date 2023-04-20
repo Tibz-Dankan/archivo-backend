@@ -1,4 +1,4 @@
-import { finished } from "stream/promises";
+import { finished } from "node:stream/promises";
 import { Upload } from "../../../utils/upload";
 import { RandomNumber } from "../../../utils/random";
 import { AppError } from "../../../utils/error";
