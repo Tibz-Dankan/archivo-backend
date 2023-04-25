@@ -36,8 +36,12 @@ const fileMutations = {
     console.log("context");
     console.log(context);
 
+    console.log("clientUpload");
+    console.log(clientUpload);
+
     const { createReadStream, filename } = await clientUpload.file;
-    const { folderId, subFolderId, path } = await clientUpload.file;
+    const { folderId, subFolderId } = await clientUpload.file;
+    const path = clientUpload.path;
 
     // some file validations
     // TODO: validate path
