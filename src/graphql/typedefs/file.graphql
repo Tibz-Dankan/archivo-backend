@@ -11,6 +11,7 @@ type File {
   ownerId: String
   name: String!
   url: String
+  path: String
   systemName: String!
   createdAt: String # UTC string date
   updatedAt: String # UTC string date
