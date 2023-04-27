@@ -8,10 +8,14 @@ dotenv.config();
 
 const app = express();
 
+let frontendURL: string;
+
 if (process.env.NODE_ENV === "production") {
-  app.use(cors({ origin: process.env.FRONTEND_URL_PROD, credentials: true }));
+  (frontendURL = process.env.FRONTEND_URL_PROD!),
+    app.use(cors({ origin: process.env.FRONTEND_URL_PROD, credentials: true }));
 } else {
-  app.use(cors({ origin: process.env.FRONTEND_URL_DEV, credentials: true }));
+  (frontendURL = process.env.FRONTEND_URL_DEV!),
+    app.use(cors({ origin: process.env.FRONTEND_URL_DEV, credentials: true }));
 }
 
 app.use(graphqlUploadExpress());
@@ -24,6 +28,7 @@ const startGraphqlServer = async () => {
 
     graphqlServer.applyMiddleware({
       app,
+      cors: { origin: frontendURL, credentials: true },
     });
   } catch (err: any) {
     console.log(err.message);
