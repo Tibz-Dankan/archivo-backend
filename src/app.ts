@@ -26,6 +26,9 @@ const startGraphqlServer = async () => {
   try {
     await graphqlServer.start();
 
+    console.log("frontendURL");
+    console.log(frontendURL);
+
     graphqlServer.applyMiddleware({
       app,
       cors: { origin: frontendURL, credentials: true },
