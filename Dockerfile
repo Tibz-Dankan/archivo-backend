@@ -8,7 +8,7 @@ RUN npm install --only=prod
 
 COPY . .
 
-WORKDIR  /src/db
+WORKDIR  /app/src/db
 
 RUN  npx prisma generate
 
