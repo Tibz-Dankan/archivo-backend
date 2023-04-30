@@ -13,7 +13,7 @@ app.use(graphqlUploadExpress());
 const PORT = process.env.PORT || 8000;
 
 const corsOptions = {
-  origin: process.env.FRONTEND_URL!,
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 };
 
@@ -21,8 +21,8 @@ const startGraphqlServer = async () => {
   try {
     await graphqlServer.start();
 
-    console.log("process.env.FRONTEND_URL_PROD,");
-    console.log(process.env.FRONTEND_URL_PROD);
+    console.log("process.env.FRONTEND_URL,");
+    console.log(process.env.FRONTEND_URL!);
 
     graphqlServer.applyMiddleware({
       app,
