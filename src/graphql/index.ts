@@ -4,7 +4,7 @@ import schema from "./schema";
 
 const apolloServer = new ApolloServer({
   schema,
-  csrfPrevention: true,
+  // csrfPrevention: true,
   cache: "bounded",
   plugins: [ApolloServerPluginLandingPageLocalDefault({ embed: true })],
 });
