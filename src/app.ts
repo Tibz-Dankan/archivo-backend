@@ -1,12 +1,18 @@
 import express from "express";
 import cors from "cors";
+import http from "http";
+import bodyParser from "body-parser";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServer } from "@apollo/server";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import dotenv from "dotenv";
-import graphqlServer from "./graphql";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
+import schema from "./graphql/schema";
 
 dotenv.config();
 
 const app = express();
+const httpServer = http.createServer(app);
 
 app.use(graphqlUploadExpress());
 
@@ -17,27 +23,18 @@ const corsOptions = {
   credentials: true,
 };
 
-const startGraphqlServer = async () => {
-  try {
-    await graphqlServer.start();
+const gqlServer = new ApolloServer({
+  schema,
+  csrfPrevention: true,
+  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+});
+await gqlServer.start();
 
-    console.log("process.env.FRONTEND_URL,");
-    console.log(process.env.FRONTEND_URL!);
-
-    graphqlServer.applyMiddleware({
-      app,
-      cors: corsOptions,
-    });
-  } catch (err: any) {
-    console.log(err.message);
-  }
-};
-
-startGraphqlServer();
+app.use(cors(corsOptions), bodyParser.json(), expressMiddleware(gqlServer));
 
 const startApp = async () => {
   try {
-    await app.listen(PORT);
+    await httpServer.listen({ port: PORT });
     console.log(`🚀  GraphQL server running at port: ${PORT}`);
   } catch (err: any) {
     console.log("Not able to run GraphQL server");
