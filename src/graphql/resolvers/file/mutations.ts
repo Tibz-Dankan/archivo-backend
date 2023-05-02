@@ -9,7 +9,7 @@ const file = new File();
 
 const fileFolderId = async (upload: any) => {
   let id: string = "";
-  const { folderId, subFolderId } = await upload.file;
+  const { folderId, subFolderId } = await upload;
 
   if (!folderId && !subFolderId) {
     new AppError("please supply file path!", 400).badUserInput();
@@ -40,7 +40,7 @@ const fileMutations = {
     console.log(clientUpload);
 
     const { createReadStream, filename } = await clientUpload.file;
-    const { folderId, subFolderId } = await clientUpload.file;
+    const { folderId, subFolderId } = await clientUpload;
     const path = clientUpload.path;
 
     // some file validations
