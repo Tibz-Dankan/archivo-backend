@@ -28,7 +28,12 @@ type Mutation {
   updatePassword(id: ID!, user: UpdatePasswordInput!): User!
 
   # Files
-  singleUpload(file: Upload!, path: String): File!
+  singleUpload(
+    file: Upload!
+    path: String
+    folderId: String
+    subFolderId: String
+  ): File!
   # createFile(file: FileCreateInput!): File!
   # updateFile(id: ID!, file: FileUpdateInput!): File!
 
