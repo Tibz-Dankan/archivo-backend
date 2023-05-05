@@ -36,31 +36,27 @@ const fileMutations = {
     console.log("context");
     console.log(context);
 
-    console.log("clientUpload");
     console.log(clientUpload);
 
     const { createReadStream, filename } = await clientUpload.file;
     const { folderId, subFolderId } = await clientUpload;
     const path = clientUpload.path;
+    const ownerId = clientUpload.ownerId;
 
-    // some file validations
-    // TODO: validate path
     if (!path) {
       new AppError("please supply the file path!", 400).badUserInput();
     }
-    const userId = context.id; //TODO: get id after verifying user
+    if (!ownerId) {
+      new AppError("please supply the ownerId!", 400).badUserInput();
+    }
     const name: string = filename;
     const fileSystemName = `${new RandomNumber().d4()}_${filename}`;
-    console.log("fileSystemName");
-    console.log(fileSystemName);
 
+    // TODO: To add userId to filePath
     const stream = createReadStream();
     const filePath = `files/${path}/${fileSystemName}`;
 
     const upload = await new Upload(filePath).add(stream);
-
-    console.log("url");
-    console.log(upload?.url);
 
     const url = upload?.url;
 
@@ -71,14 +67,14 @@ const fileMutations = {
       systemName: fileSystemName,
       url: url,
       path: filePath,
-      ownerId: userId,
-      folderId: folderId && fileFolderId(clientUpload),
-      subFolderId: subFolderId && fileFolderId(clientUpload),
+      ownerId: ownerId,
+      folderId: folderId && (await fileFolderId(clientUpload)),
+      subFolderId: subFolderId && (await fileFolderId(clientUpload)),
     };
+    console.log(fileObj);
 
     const newFile = await file.create(fileObj);
 
-    // return { filename, mimetype, encoding };
     return newFile;
   },
   //   createUser: async (_, args) => {},
