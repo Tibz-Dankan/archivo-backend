@@ -33,6 +33,7 @@ type Mutation {
     path: String
     folderId: String
     subFolderId: String
+    ownerId: String
   ): File!
   # createFile(file: FileCreateInput!): File!
   # updateFile(id: ID!, file: FileUpdateInput!): File!

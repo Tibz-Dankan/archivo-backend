@@ -25,6 +25,7 @@ export default class File {
       data: file,
       select: {
         id: true,
+        ownerId: true,
         name: true,
         systemName: true,
         path: true,
