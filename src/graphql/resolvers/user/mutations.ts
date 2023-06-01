@@ -5,6 +5,8 @@ import { AppError } from "../../../utils/error";
 
 const user = new User();
 
+// TODO: verify auth tokens in the resolvers
+
 const userMutations = {
   signup: async (_: any, args: UserInterface) => {
     console.log(args);
