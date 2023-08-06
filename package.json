@@ -33,6 +33,7 @@
     "graphql": "^16.6.0",
     "graphql-upload": "^16.0.2",
     "jsonwebtoken": "^9.0.0",
+    "keep-apps-active": "^1.0.1",
     "nodemon": "^2.0.21",
     "prisma": "^4.11.0",
     "ts-node": "^10.9.1",

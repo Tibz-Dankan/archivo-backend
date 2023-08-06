@@ -8,6 +8,7 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import dotenv from "dotenv";
 import graphqlUploadExpress from "graphql-upload/graphqlUploadExpress.mjs";
 import schema from "./graphql/schema";
+// import { keepActiveController } from "keep-apps-active";
 
 dotenv.config();
 
@@ -15,6 +16,8 @@ const app = express();
 const httpServer = http.createServer(app);
 
 app.use(graphqlUploadExpress());
+
+// keepActiveController(app);
 
 const PORT = process.env.PORT || 8000;
 
