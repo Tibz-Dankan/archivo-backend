@@ -17,7 +17,7 @@
     "@babel/plugin-proposal-decorators": "^7.21.0",
     "@babel/preset-env": "^7.21.4",
     "@graphql-tools/schema": "^9.0.16",
-    "@prisma/client": "^4.11.0",
+    "@prisma/client": "^5.1.1",
     "@sendgrid/mail": "^7.7.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.13",
@@ -35,7 +35,7 @@
     "jsonwebtoken": "^9.0.0",
     "keep-apps-active": "^1.0.1",
     "nodemon": "^2.0.21",
-    "prisma": "^4.11.0",
+    "prisma": "^5.1.1",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^4.9.5"
